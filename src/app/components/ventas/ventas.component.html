@@ -1,84 +1,110 @@
 <h2 class="text-center mt-2 mb-3">REALIZAR VENTA</h2>
-<form class="example-form" style="display: flex; justify-content: space-between;">
-    <mat-form-field class="example-full-width">
-        <mat-label>Producto</mat-label>
-        <input type="text" placeholder="Elige Producto" aria-label="Number" matInput [formControl]="myControl"
-            [matAutocomplete]="auto" />
-        <mat-autocomplete #auto="matAutocomplete">
-            <mat-option *ngFor="let option of filteredOptions | async; track: option" [value]="option">{{ option
-                }}</mat-option>
-        </mat-autocomplete>
-    </mat-form-field>
-    <mat-form-field class="example-full-width">
-        <mat-label>Cantidad</mat-label>
-        <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="myControl"/>
-    </mat-form-field>
-    <mat-form-field class="example-full-width">
-        <mat-label> Precio Uni</mat-label>
-        <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="myControl"/>
-    </mat-form-field>
-    <button mat-flat-button color="primary"> Agregar </button>
-</form>
-
-
+<div
+  class="example-form"
+  style="display: flex; justify-content: space-between"
+>
+  <mat-form-field class="example-full-width">
+    <mat-label>Producto</mat-label>
+    <input
+      type="text"
+      placeholder="Elige Producto"
+      aria-label="Number"
+      matInput
+      [formControl]="producto"
+      [matAutocomplete]="auto"
+    />
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option
+        *ngFor="let option of filteredOptions | async; track: option"
+        [value]="option"
+        >{{ option }}</mat-option
+      >
+    </mat-autocomplete>
+  </mat-form-field>
+  <mat-form-field class="example-full-width">
+    <mat-label>Cantidad</mat-label>
+    <input
+      type="text"
+      placeholder="Escribe Cantidad"
+      aria-label="Number"
+      matInput
+      [formControl]="cantidad"
+    />
+  </mat-form-field>
+  <mat-form-field class="example-full-width">
+    <mat-label> Precio Uni</mat-label>
+    <input
+      type="text"
+      placeholder=""
+      aria-label="Number"
+      matInput
+      [formControl]="precio"
+    />
+  </mat-form-field>
+  <button mat-flat-button color="primary" (click)="agregarProducto()">
+    Agregar
+  </button>
+</div>
+{{dataSource | json}}
 <div class="mat-elevation-z8">
-    <table mat-table [dataSource]="dataSource">
-      <ng-container matColumnDef="Nro">
-        <th mat-header-cell *matHeaderCellDef>No.</th>
-        <td mat-cell *matCellDef="let element">{{ element.nro }}</td>
-      </ng-container>
-  
-      <ng-container matColumnDef="Nombre">
-        <th mat-header-cell *matHeaderCellDef>Name</th>
-        <td mat-cell *matCellDef="let element">{{ element.nombre }}</td>
-      </ng-container>
-      <ng-container matColumnDef="Categoria">
-        <th mat-header-cell *matHeaderCellDef>Categoria</th>
-        <td mat-cell *matCellDef="let element">{{ element.categoria }}</td>
-      </ng-container>
-  
-      <!-- Symbol Column -->
-      <ng-container matColumnDef="Precio">
-        <th mat-header-cell *matHeaderCellDef>Precio</th>
-        <td mat-cell *matCellDef="let element">{{ element.precio | currency:'S/.' }}</td>
-      </ng-container>
-  
-      <ng-container matColumnDef="Costo">
-        <th mat-header-cell *matHeaderCellDef>Costo</th>
-        <td mat-cell *matCellDef="let element">{{ element.precio | currency:'S/.'  }}</td>
-      </ng-container>
-  
-      <ng-container matColumnDef="Stock">
-        <th mat-header-cell *matHeaderCellDef>Stock</th>
-        <td mat-cell *matCellDef="let element">{{ element.stock + ' UND.'  }}</td>
-      </ng-container>
-  
-  
-      <ng-container matColumnDef="Options">
-        <th mat-header-cell *matHeaderCellDef>Options</th>
-        <td mat-cell *matCellDef="let element">
-          <button
-            mat-mini-fab
-            color="primary"
-            style="margin-right: 10px"
-            aria-label="Example icon button with a menu icon"
-            
-          >
-            <mat-icon> edit </mat-icon>
-          </button>
-          <button
-            mat-mini-fab
-            color="warn"
-            aria-label="Example icon button with a menu icon"
-            (click)="removeItem(element)"
-          >
-            <mat-icon > delete </mat-icon>
-          </button>
-        </td>
-      </ng-container>
-  
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    </table>
-  
-  </div>
+  <table mat-table [dataSource]="dataSource" #table>
+    <ng-container matColumnDef="Nro">
+      <th mat-header-cell *matHeaderCellDef>No.</th>
+      <td mat-cell *matCellDef="let element">{{ element.nro }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="Nombre">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let element">{{ element.nombre }}</td>
+    </ng-container>
+    <ng-container matColumnDef="Categoria">
+      <th mat-header-cell *matHeaderCellDef>Categoria</th>
+      <td mat-cell *matCellDef="let element">{{ element.categoria }}</td>
+    </ng-container>
+
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="PrecioUnitario">
+      <th mat-header-cell *matHeaderCellDef>Precio Unitario</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.precioUnitario | currency : "S/." }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="PrecioTotal">
+      <th mat-header-cell *matHeaderCellDef>Costo</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.precioTotal | currency : "S/." }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Unidades">
+      <th mat-header-cell *matHeaderCellDef>Unidades</th>
+      <td mat-cell *matCellDef="let element">{{ element.unidades + " UND." }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="Options">
+      <th mat-header-cell *matHeaderCellDef>Options</th>
+      <td mat-cell *matCellDef="let element">
+        <button
+          mat-mini-fab
+          color="primary"
+          style="margin-right: 10px"
+          aria-label="Example icon button with a menu icon"
+        >
+          <mat-icon> edit </mat-icon>
+        </button>
+        <button
+          mat-mini-fab
+          color="warn"
+          aria-label="Example icon button with a menu icon"
+          (click)="removeItem(element)"
+        >
+          <mat-icon> delete </mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</div>
