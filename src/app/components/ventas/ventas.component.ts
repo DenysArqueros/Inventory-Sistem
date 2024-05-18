@@ -1,13 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { Component } from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatInputModule } from '@angular/material/input';
+import { MatTableModule } from '@angular/material/table';
 
-import { ModalproductoComponent } from '../modalproducto/modalproducto.component';
-
+import { map, Observable, startWith } from 'rxjs';
 export interface Products {
   nombre: string;
   nro: number;
@@ -49,34 +50,40 @@ const ELEMENT_DATA: Products[] = [
   { nro: 29, nombre: 'Fluorine', precio: 18.9984, descripcion: 'F', categoria: 'Trago', stock: 12 },
   { nro: 30, nombre: 'Neon', precio: 20.1797, descripcion: 'Ne', categoria: 'Trago', stock: 12 },
 ];
-
 @Component({
-  selector: 'app-home',
+  selector: 'app-ventas',
   standalone: true,
-  imports: [MatTableModule, CommonModule, MatButtonModule, MatPaginatorModule, MatIconModule, MatDialogModule],
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],
+  imports: [MatAutocompleteModule,MatFormFieldModule,ReactiveFormsModule,CommonModule,MatInputModule,MatButtonModule
+  ,MatTableModule,MatIconModule],
+  templateUrl: './ventas.component.html',
+  styleUrls: ['./ventas.component.css']
 })
-export class HomeComponent {
+export class VentasComponent {
+
+  myControl = new FormControl('');
+  options: string[] = ['Red label', 'Blue label', 'Gold label'];
+  filteredOptions!: Observable<string[]>;
+  dataSource = ELEMENT_DATA
   displayedColumns: string[] = ['Nro', 'Nombre', 'Categoria', 'Precio', 'Costo', 'Stock', 'Options'];
-  dataSource = new MatTableDataSource<Products>(ELEMENT_DATA);
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+  ngOnInit() {
+    this.filteredOptions = this.myControl.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value || '')),
+    );
   }
 
-  constructor(public dialog: MatDialog) { }
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
 
-  openDialog(element: any, type: number): void {
-    const dialogRef = this.dialog.open(ModalproductoComponent, {
-      data: { ...element, type: type },
-    });
-    dialogRef.afterClosed().subscribe(result => {
-    });
+    return this.options.filter(option => option.toLowerCase().includes(filterValue));
   }
 
-
+  removeItem(element: any) {
+    this.dataSource = this.dataSource.filter(x=> x.nro!== element.nro);
+   
+    
+  }
 
 }
