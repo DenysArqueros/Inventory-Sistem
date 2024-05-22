@@ -16,12 +16,12 @@ export class ProductService {
     return this.httpClient.get<ProductoInterface>(this.base + 'producto');
   }
 
-  createProducto(marca: ProductoInterface): Observable<ProductoInterface> {
-    return this.httpClient.post<ProductoInterface>(this.base + 'producto', marca);
+  createProducto(producto: ProductoInterface): Observable<ProductoInterface> {
+    return this.httpClient.post<ProductoInterface>(this.base + 'producto', producto);
   }
 
-  updateProducto(marca: ProductoInterface): Observable<ProductoInterface> {
-    return this.httpClient.put<ProductoInterface>(this.base + 'producto', marca);
+  updateProducto(producto: ProductoInterface): Observable<ProductoInterface> {
+    return this.httpClient.put<ProductoInterface>(this.base + 'producto', producto);
   }
 
   deleteProducto(marca: ProductoInterface): Observable<ProductoInterface> {
