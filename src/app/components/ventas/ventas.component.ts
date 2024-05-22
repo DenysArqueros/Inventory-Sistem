@@ -64,6 +64,8 @@ export class VentasComponent {
     'Options',
   ];
 
+  showTable = true;
+
   ngOnInit() {
     this.filteredOptions = this.producto.valueChanges.pipe(
       startWith(''),
@@ -95,5 +97,11 @@ export class VentasComponent {
       precioTotal: 100,
       unidades: 2,
     });
+    this.showTable = false;
+    setTimeout(() => {
+      this.showTable = true;
+    }, 100);
   }
+
+  
 }

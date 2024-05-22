@@ -45,8 +45,8 @@
     Agregar
   </button>
 </div>
-{{dataSource | json}}
-<div class="mat-elevation-z8">
+
+<div class="mat-elevation-z8" *ngIf="showTable">
   <table mat-table [dataSource]="dataSource" #table>
     <ng-container matColumnDef="Nro">
       <th mat-header-cell *matHeaderCellDef>No.</th>
@@ -107,4 +107,9 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
+</div>
+<div class="text-end mt-2">
+  <button mat-stroked-button color="primary">
+    Realizar Venta
+  </button>
 </div>

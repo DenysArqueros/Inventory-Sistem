@@ -6,20 +6,20 @@ import { NavComponent } from './components/nav/nav.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './components/home/home.component';
-
+import { MarcaService } from './services/marca/marca.service';
+import { HttpClientModule } from '@angular/common/http';
+import { ProductService } from './services/producto/product.service';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    NavComponent,
-  ],
+  declarations: [AppComponent, NavComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    HomeComponent
+    HomeComponent,
+    HttpClientModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [MarcaService, ProductService],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
