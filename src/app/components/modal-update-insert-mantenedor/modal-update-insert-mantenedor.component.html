@@ -1,0 +1,14 @@
+<h2 class="text-center mt-2"> {{title}} </h2>
+<div class="example-form">
+    <div class="text-center">
+        <mat-form-field class="example-full-width">
+            <mat-label>Ingresa Nombre</mat-label>
+            <input matInput [(ngModel)]="data.nombre">
+          </mat-form-field>
+    </div>
+    <div class="text-center">
+    <button mat-flat-button color="primary" style="margin-right: 10px;" [mat-dialog-close]="data" cdkFocusInitial>Aceptar</button>
+    <button mat-flat-button color="warn" (click)="onNoClick()">Cancelar</button>
+    </div>
+  </div>
+  

@@ -6,8 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatTable, MatTableModule } from '@angular/material/table';
-
+import { MatTableModule } from '@angular/material/table';
 import { map, Observable, startWith } from 'rxjs';
 export interface ProductVenta {
   nombre: string;
@@ -20,16 +19,18 @@ export interface ProductVenta {
   unidades: number;
 }
 
-const ELEMENT_DATA: ProductVenta[] = [{
-  nombre: 'Red Label',
-  nro: 1,
-  precioUnitario: 50.0,
-  descripcion: 'Whisky Red Label',
-  categoria: 'Licores',
-  stock: 1,
-  precioTotal: 100,
-  unidades: 2,
-}];
+const ELEMENT_DATA: ProductVenta[] = [
+  {
+    nombre: 'Red Label',
+    nro: 1,
+    precioUnitario: 50.0,
+    descripcion: 'Whisky Red Label',
+    categoria: 'Licores',
+    stock: 1,
+    precioTotal: 100,
+    unidades: 2,
+  },
+];
 @Component({
   selector: 'app-ventas',
   standalone: true,
@@ -73,7 +74,6 @@ export class VentasComponent {
     );
   }
 
-
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
 
@@ -102,6 +102,4 @@ export class VentasComponent {
       this.showTable = true;
     }, 100);
   }
-
-  
 }

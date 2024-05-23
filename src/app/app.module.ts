@@ -12,7 +12,7 @@ import { ProductService } from './services/producto/product.service';
 import { UnidadmedidaService } from './services/unidadMedida/unidadmedida.service';
 
 @NgModule({
-  declarations: [AppComponent, NavComponent],
+  declarations: [AppComponent, NavComponent, ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

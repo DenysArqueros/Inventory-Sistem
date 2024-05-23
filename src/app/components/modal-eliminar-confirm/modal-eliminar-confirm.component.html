@@ -1,0 +1,11 @@
+<h2 class="text-center mt-2"> Confirmacion! </h2>
+<div class="example-form">
+    <div class="text-center">
+        <h3> ¿Esta Seguro de Eliminar este registro?</h3>
+    </div>
+    <div class="text-center">
+    <button mat-flat-button color="primary" style="margin-right: 10px;" [mat-dialog-close]="true" cdkFocusInitial>Aceptar</button>
+    <button mat-flat-button color="warn" (click)="onNoClick()">Cancelar</button>
+    </div>
+</div>
+  

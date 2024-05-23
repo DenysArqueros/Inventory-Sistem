@@ -20,7 +20,7 @@ export class MarcaService {
     return this.httpClient.post<MarcaInterface>(this.base + 'marca', marca);
   }
 
-  public pdateMarca(marca: MarcaInterface): Observable<MarcaInterface> {
+  public updateMarca(marca: MarcaInterface): Observable<MarcaInterface> {
     return this.httpClient.put<MarcaInterface>(this.base + 'marca', marca);
   }
 
