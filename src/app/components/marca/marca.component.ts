@@ -45,14 +45,16 @@ export class MarcaComponent {
   deleteItem(item: MarcaInterface) {
     const dialogRef = this.dialog.open(ModalEliminarConfirmComponent, {
       width: '350px',
-      height : '200px',
+      height : '150px',
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       console.log(result);
       if(result){
         this.marcaService.deleteMarca(item.id).subscribe((data: any)=>{
-          this._snackBar.open(data.message);
+          this._snackBar.open(data.message,'',{
+            duration: 3000
+          });
           this.loadData();
         });
       }
@@ -72,12 +74,16 @@ export class MarcaComponent {
       if(result){
         if(item.id){
           this.marcaService.updateMarca(result).subscribe((data:any)=>{
-            this._snackBar.open(data.message);
+            this._snackBar.open(data.message,'',{
+              duration: 3000
+            });
             this.loadData();
           });       
         }else{
           this.marcaService.createMarca(result).subscribe((data:any)=>{
-            this._snackBar.open(data.message);
+            this._snackBar.open(data.message,'',{
+              duration: 3000
+            });
             this.loadData();
           });
         }

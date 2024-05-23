@@ -6,6 +6,10 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { UnidadMedidaInterface } from 'src/app/interfaces/UnidadMedida.interface';
 import { UnidadmedidaService } from 'src/app/services/unidadMedida/unidadmedida.service';
+import { ModalUpdateInsertMantenedorComponent } from '../modal-update-insert-mantenedor/modal-update-insert-mantenedor.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { ModalEliminarConfirmComponent } from '../modal-eliminar-confirm/modal-eliminar-confirm.component';
 
 @Component({
   selector: 'app-unidad-medida',
@@ -16,40 +20,82 @@ import { UnidadmedidaService } from 'src/app/services/unidadMedida/unidadmedida.
     MatPaginatorModule,
     MatIconModule,
     MatButtonModule,
+    MatSnackBarModule
   ],
   templateUrl: './unidad-medida.component.html',
   styleUrls: ['./unidad-medida.component.css']
 })
 export class UnidadMedidaComponent {
-  constructor(private unidadMedida: UnidadmedidaService) {
-
-  }
+  constructor(private unidadMedidaService: UnidadmedidaService , public dialog: MatDialog,private _snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
-    this.unidadMedida.getUnidadMedida().subscribe((data: UnidadMedidaInterface) => {
-      this.dataSource.data.push(data);
-    });
+    this.loadData();
   }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
-  ELEMENT_DATA: UnidadMedidaInterface[] = [
-    {
-      id: 3,
-      nombre: 'Jhonie Walker',
-    },
-  ];
+
 
   displayedColumns: string[] = ['Codigo', 'Nombre', 'Options'];
-  dataSource = new MatTableDataSource<UnidadMedidaInterface>(this.ELEMENT_DATA);
+  dataSource = new MatTableDataSource<UnidadMedidaInterface>([]);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   deleteItem(item: UnidadMedidaInterface) {
-    this.unidadMedida.deleteUnidadMedida(item.id).subscribe();
+    const dialogRef = this.dialog.open(ModalEliminarConfirmComponent, {
+      width: '350px',
+      height : '150px',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if(result){
+        this.unidadMedidaService.deleteUnidadMedida(item.id).subscribe((data: any)=>{
+          this._snackBar.open(data.message,'',{
+            duration: 3000
+          });
+          this.loadData();
+        });
+      }
+    });
+  }
+
+  insertUpdate(item: any, component : string) {
+    item.component = component;
+    const dialogRef = this.dialog.open(ModalUpdateInsertMantenedorComponent, {
+      width: '350px',
+      height : '200px',
+      data: {...item},
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      delete  result?.component;
+      if(result){
+        if(item.id){
+          this.unidadMedidaService.updateUnidadMedida(result).subscribe((data:any)=>{
+            this._snackBar.open(data.message,'',{
+              duration: 3000
+            });
+            this.loadData();
+          });       
+        }else{
+          this.unidadMedidaService.createUnidadMedida(result).subscribe((data:any)=>{
+            this._snackBar.open(data.message,'',{
+              duration: 3000
+            });
+            this.loadData();
+          });
+        }
+      }
+    });
+  }
+
+  loadData(){
+    this.unidadMedidaService.getUnidadMedida().subscribe((data: any) => {
+      this.dataSource.data = data;
+    });
   }
 
 
-
+  
 }
