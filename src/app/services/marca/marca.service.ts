@@ -12,20 +12,21 @@ export class MarcaService {
   
   constructor(private httpClient: HttpClient) {}
 
-  getMarca(): Observable<MarcaInterface> {
+  public getMarca(): Observable<MarcaInterface> {
     return this.httpClient.get<MarcaInterface>(this.base + 'marca');
   }
 
-  createMarca(marca: MarcaInterface): Observable<MarcaInterface> {
+  public createMarca(marca: MarcaInterface): Observable<MarcaInterface> {
     return this.httpClient.post<MarcaInterface>(this.base + 'marca', marca);
   }
 
-  updateMarca(marca: MarcaInterface): Observable<MarcaInterface> {
+  public pdateMarca(marca: MarcaInterface): Observable<MarcaInterface> {
     return this.httpClient.put<MarcaInterface>(this.base + 'marca', marca);
   }
 
-  deleteMarca(marca: MarcaInterface): Observable<MarcaInterface> {
-    return this.httpClient.delete<MarcaInterface>(this.base + 'marca');
+  public deleteMarca(idmarca: number): Observable<MarcaInterface> {
+    console.log(this.base + 'marca/' + idmarca);
+    return this.httpClient.delete<MarcaInterface>(this.base + 'marca/' + idmarca);
   }
 
 }

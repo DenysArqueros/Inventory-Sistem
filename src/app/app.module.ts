@@ -9,6 +9,7 @@ import { HomeComponent } from './components/home/home.component';
 import { MarcaService } from './services/marca/marca.service';
 import { HttpClientModule } from '@angular/common/http';
 import { ProductService } from './services/producto/product.service';
+import { UnidadmedidaService } from './services/unidadMedida/unidadmedida.service';
 
 @NgModule({
   declarations: [AppComponent, NavComponent],
@@ -19,7 +20,7 @@ import { ProductService } from './services/producto/product.service';
     HomeComponent,
     HttpClientModule
   ],
-  providers: [MarcaService, ProductService],
+  providers: [MarcaService, ProductService, UnidadmedidaService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
