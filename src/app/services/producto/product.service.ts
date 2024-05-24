@@ -24,7 +24,7 @@ export class ProductService {
     return this.httpClient.put<ProductoInterface>(this.base + 'producto', producto);
   }
 
-  deleteProducto(marca: ProductoInterface): Observable<ProductoInterface> {
-    return this.httpClient.delete<ProductoInterface>(this.base + 'producto');
+  deleteProducto(idProducto: number): Observable<ProductoInterface> {
+    return this.httpClient.delete<ProductoInterface>(this.base + 'producto/' + idProducto);
   }
 }

@@ -3,5 +3,9 @@ export interface ProductoInterface {
     nombre: string,
     precio: number,
     descripcion: string,
-    stock : number
+    stock : number,
+    costo : number,
+    categoriaId : number,
+    unidadId : number,
+    marcaId : number
 }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -7,6 +7,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 import { ModalproductoComponent } from '../modalproducto/modalproducto.component';
+import { ProductService } from 'src/app/services/producto/product.service';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { ProductoInterface } from 'src/app/interfaces/Producto.interface';
+import { ModalEliminarConfirmComponent } from '../modal-eliminar-confirm/modal-eliminar-confirm.component';
 
 export interface Products {
   nombre: string;
@@ -14,52 +18,37 @@ export interface Products {
   precio: number;
   descripcion: string;
   categoria: string;
-  stock: number
+  stock: number;
 }
-
-const ELEMENT_DATA: Products[] = [
-  { nro: 1, nombre: 'Blue Label', precio: 1.0079, descripcion: 'H', categoria: 'Trago', stock: 12 },
-  { nro: 2, nombre: 'Red Label', precio: 4.0026, descripcion: 'He', categoria: 'Trago', stock: 12 },
-  { nro: 3, nombre: 'Lithium', precio: 6.941, descripcion: 'Li', categoria: 'Trago', stock: 12 },
-  { nro: 4, nombre: 'Beryllium', precio: 9.0122, descripcion: 'Be', categoria: 'Trago', stock: 12 },
-  { nro: 5, nombre: 'Boron', precio: 10.811, descripcion: 'B', categoria: 'Trago', stock: 12 },
-  { nro: 6, nombre: 'Carbon', precio: 12.0107, descripcion: 'C', categoria: 'Trago', stock: 12 },
-  { nro: 7, nombre: 'Nitrogen', precio: 14.0067, descripcion: 'N', categoria: 'Trago', stock: 12 },
-  { nro: 8, nombre: 'Oxygen', precio: 15.9994, descripcion: 'O', categoria: 'Trago', stock: 12 },
-  { nro: 9, nombre: 'Fluorine', precio: 18.9984, descripcion: 'F', categoria: 'Trago', stock: 12 },
-  { nro: 10, nombre: 'Neon', precio: 20.1797, descripcion: 'Ne', categoria: 'Trago', stock: 12 },
-  { nro: 11, nombre: 'Hydrogen', precio: 1.0079, descripcion: 'H', categoria: 'Trago', stock: 12 },
-  { nro: 12, nombre: 'Helium', precio: 4.0026, descripcion: 'He', categoria: 'Trago', stock: 12 },
-  { nro: 13, nombre: 'Lithium', precio: 6.941, descripcion: 'Li', categoria: 'Trago', stock: 12 },
-  { nro: 14, nombre: 'Beryllium', precio: 9.0122, descripcion: 'Be', categoria: 'Trago', stock: 12 },
-  { nro: 15, nombre: 'Boron', precio: 10.811, descripcion: 'B', categoria: 'Trago', stock: 12 },
-  { nro: 16, nombre: 'Carbon', precio: 12.0107, descripcion: 'C', categoria: 'Trago', stock: 12 },
-  { nro: 17, nombre: 'Nitrogen', precio: 14.0067, descripcion: 'N', categoria: 'Trago', stock: 12 },
-  { nro: 18, nombre: 'Oxygen', precio: 15.9994, descripcion: 'O', categoria: 'Trago', stock: 12 },
-  { nro: 19, nombre: 'Fluorine', precio: 18.9984, descripcion: 'F', categoria: 'Trago', stock: 12 },
-  { nro: 20, nombre: 'Neon', precio: 20.1797, descripcion: 'Ne', categoria: 'Trago', stock: 12 },
-  { nro: 21, nombre: 'Hydrogen', precio: 1.0079, descripcion: 'H', categoria: 'Trago', stock: 12 },
-  { nro: 22, nombre: 'Helium', precio: 4.0026, descripcion: 'He', categoria: 'Trago', stock: 12 },
-  { nro: 23, nombre: 'Lithium', precio: 6.941, descripcion: 'Li', categoria: 'Trago', stock: 12 },
-  { nro: 24, nombre: 'Beryllium', precio: 9.0122, descripcion: 'Be', categoria: 'Trago', stock: 12 },
-  { nro: 25, nombre: 'Boron', precio: 10.811, descripcion: 'B', categoria: 'Trago', stock: 12 },
-  { nro: 26, nombre: 'Carbon', precio: 12.0107, descripcion: 'C', categoria: 'Trago', stock: 12 },
-  { nro: 27, nombre: 'Nitrogen', precio: 14.0067, descripcion: 'N', categoria: 'Trago', stock: 12 },
-  { nro: 28, nombre: 'Oxygen', precio: 15.9994, descripcion: 'O', categoria: 'Trago', stock: 12 },
-  { nro: 29, nombre: 'Fluorine', precio: 18.9984, descripcion: 'F', categoria: 'Trago', stock: 12 },
-  { nro: 30, nombre: 'Neon', precio: 20.1797, descripcion: 'Ne', categoria: 'Trago', stock: 12 },
-];
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [MatTableModule, CommonModule, MatButtonModule, MatPaginatorModule, MatIconModule, MatDialogModule],
+  imports: [
+    MatTableModule,
+    CommonModule,
+    MatButtonModule,
+    MatPaginatorModule,
+    MatIconModule,
+    MatDialogModule,
+    MatSnackBarModule,
+  ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
 })
-export class HomeComponent {
-  displayedColumns: string[] = ['Nro', 'Nombre', 'Categoria', 'Precio', 'Costo', 'Stock', 'Options'];
-  dataSource = new MatTableDataSource<Products>(ELEMENT_DATA);
+export class HomeComponent implements OnInit{
+  displayedColumns: string[] = [
+    'Nro',
+    'Nombre',
+    'Marca',
+    'Categoria',
+    'UnidadMedida',
+    'Costo',
+    'Precio',
+    'Stock',
+    'Options',
+  ];
+  dataSource = new MatTableDataSource<Products>([]);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -67,16 +56,66 @@ export class HomeComponent {
     this.dataSource.paginator = this.paginator;
   }
 
-  constructor(public dialog: MatDialog) { }
+  ngOnInit(): void {
+    this.loadData()
+  }
 
-  openDialog(element: any, type: number): void {
+  constructor(
+    public dialog: MatDialog,
+    private productoService: ProductService,
+    private _snackBar: MatSnackBar
+  ) {}
+
+  openDialog(item: any): void {
     const dialogRef = this.dialog.open(ModalproductoComponent, {
-      data: { ...element, type: type },
+      width: '800px',
+      height: '450px',
+      data: { ...item},
     });
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        if(item?.id){
+          this.productoService.updateProducto(result).subscribe((data: any) => {
+            this._snackBar.open(data.message, '', {
+              duration: 3000,
+            });
+            this.loadData();
+          });    
+        }else{
+          this.productoService.createProducto(result).subscribe((data: any) => {
+            this._snackBar.open(data.message, '', {
+              duration: 3000,
+            });
+            this.loadData();
+          });
+        }
+       
+      }
     });
   }
 
+  loadData() {
+    this.productoService.getProducto().subscribe((data: any) => {
+      this.dataSource.data = data;
+    });
+  }
 
+  deleteItem(item: ProductoInterface){
+    const dialogRef = this.dialog.open(ModalEliminarConfirmComponent, {
+      width: '350px',
+      height : '150px',
+    });
 
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log(result);
+      if(result){
+        this.productoService.deleteProducto(item.id).subscribe((data: any)=>{
+          this._snackBar.open(data.message,'',{
+            duration: 3000
+          });
+          this.loadData();
+        });
+      }
+    });
+  }
 }
