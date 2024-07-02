@@ -34,6 +34,12 @@ const routes: Routes = [
       import('./components/unidad-medida/unidad-medida.component').then((x) => x.UnidadMedidaComponent),
   },
   {
+    path: 'reporteVentas',
+    canActivate: [loginGuard],
+    loadComponent: () =>
+      import('./components/reporte-ventas/reporte-ventas.component').then((x) => x.ReporteVentasComponent),
+  },
+  {
     path: '**',
     canActivate: [loginGuard],
     loadComponent: () =>

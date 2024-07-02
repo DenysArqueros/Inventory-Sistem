@@ -6,8 +6,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { map, Observable, startWith } from 'rxjs';
+import { ProductService } from 'src/app/services/producto/product.service';
+import { VentaService } from 'src/app/services/venta/venta.service';
+
 export interface ProductVenta {
   nombre: string;
   nro: number;
@@ -50,11 +53,14 @@ const ELEMENT_DATA: ProductVenta[] = [
 export class VentasComponent {
   producto = new FormControl('');
   cantidad = new FormControl('');
-  precio = new FormControl('');
+  precio = new FormControl('',);
 
-  options: string[] = ['Red label', 'Blue label', 'Gold label'];
-  filteredOptions!: Observable<string[]>;
-  dataSource = ELEMENT_DATA;
+  productoListTemp: any = [];
+  productoTemp: any = {};
+
+  filteredOptions!: Observable<any>;
+  dataSource = new MatTableDataSource<any>([]);
+
   displayedColumns: string[] = [
     'Nro',
     'Nombre',
@@ -65,41 +71,55 @@ export class VentasComponent {
     'Options',
   ];
 
-  showTable = true;
+  productOptions: any = [];
+
+  constructor(private productoService: ProductService,private ventaService: VentaService) { }
 
   ngOnInit() {
-    this.filteredOptions = this.producto.valueChanges.pipe(
-      startWith(''),
-      map((value) => this._filter(value || ''))
-    );
+    this.loadData();
   }
 
-  private _filter(value: string): string[] {
+  private _filter(value: any): string[] {
     const filterValue = value.toLowerCase();
-
-    return this.options.filter((option) =>
-      option.toLowerCase().includes(filterValue)
+    return this.productOptions.filter((option: any) =>
+      option.nombre.toLowerCase().includes(filterValue)
     );
   }
 
-  removeItem(element: any) {
-    this.dataSource = this.dataSource.filter((x) => x.nro !== element.nro);
+  removeItem(id: any) {
+    this.productoListTemp = this.productoListTemp.filter((x: any) => {
+      return x.id != id;
+    })
+    this.dataSource.data = this.productoListTemp;
   }
 
   agregarProducto() {
-    this.dataSource.push({
-      nombre: 'Red Label',
-      nro: 1,
-      precioUnitario: 50.0,
-      descripcion: 'Whisky Red Label',
-      categoria: 'Licores',
-      stock: 1,
-      precioTotal: 100,
-      unidades: 2,
-    });
-    this.showTable = false;
-    setTimeout(() => {
-      this.showTable = true;
-    }, 100);
+    this.productoTemp.unidades = this.cantidad.getRawValue();
+    this.productoTemp.subtotal = Number(this.productoTemp.precio) * Number(this.cantidad.getRawValue());
+    this.productoListTemp.push(this.productoTemp);
+    this.dataSource.data = this.productoListTemp;
   }
+
+  loadData() {
+    this.productoService.getProducto().subscribe((data: any) => {
+      this.productOptions = data;
+
+      this.filteredOptions = this.producto.valueChanges.pipe(
+        startWith(''),
+        map((value) => this._filter(value || ''))
+      );
+    });
+  }
+
+  clickProducto(producto: any) {
+    this.precio.setValue(producto.precio);
+    this.productoTemp = { ...producto }
+  }
+
+
+  realizarVenta(){
+    this.ventaService.createVenta(this.productoListTemp).subscribe();
+  }
+
+
 }

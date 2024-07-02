@@ -10,9 +10,10 @@ import { MarcaService } from './services/marca/marca.service';
 import { HttpClientModule } from '@angular/common/http';
 import { ProductService } from './services/producto/product.service';
 import { UnidadmedidaService } from './services/unidadMedida/unidadmedida.service';
+import { ReporteVentasComponent } from './components/reporte-ventas/reporte-ventas.component';
 
 @NgModule({
-  declarations: [AppComponent, NavComponent, ],
+  declarations: [AppComponent, NavComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

@@ -93,6 +93,7 @@ export class UnidadMedidaComponent {
   loadData(){
     this.unidadMedidaService.getUnidadMedida().subscribe((data: any) => {
       this.dataSource.data = data;
+   
     });
   }
 
